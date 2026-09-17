@@ -88,9 +88,9 @@ img {
 }
 
 .brand img {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.45rem;
+  width: clamp(32px, 8vw, 50px);
+  height: clamp(32px, 8vw, 50px);
+  border-radius: 10px;
 }
 
 .brand-cloud {
@@ -742,8 +742,8 @@ h3 {
   }
 
   .brand img {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: clamp(32px, 8vw, 40px);
+    height: clamp(32px, 8vw, 40px);
   }
 
   .site-nav {
