@@ -3,8 +3,12 @@ title: "How to Use Buckets on RumptyCloud"
 description: "Create an S3-compatible RumptyCloud bucket, upload files from the console or CLI, serve them on a CDN URL, and connect SDKs with access keys."
 publishedDate: 2026-08-23
 author: "Odukoya Abdullahi"
-cover: "/images/how-to-use-buckets-on-rumptycloud-banner.png"
-coverAlt: "How to Use Buckets on RumptyCloud, with the RumptyCloud logo and an object storage bucket icon"
+cover: "/journal/img/buckets-social.jpg"
+coverWidth: 1200
+coverHeight: 630
+card: "/journal/img/buckets-card.webp"
+hero: "/journal/img/buckets-hero.webp"
+coverAlt: "Cream container holding colorful objects on a blue Journal background"
 tags:
   - "Buckets"
   - "Object Storage"
