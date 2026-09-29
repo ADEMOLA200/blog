@@ -51,6 +51,7 @@ html[data-theme="light"] .theme-toggle .theme-moon { display: block; }
 }
 
 /* Markdown content keeps the reference typography without requiring HTML in posts. */
+#article { overflow-wrap: anywhere; }
 #article > h2 {
   padding-top: 32px;
   font: 700 30px/1.2 var(--f-display);

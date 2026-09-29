@@ -3,6 +3,7 @@ title: "Persistent Storage on RumptyCloud: A Practical Guide to Volumes"
 description: "Create, attach, detach, and reattach persistent block storage volumes on RumptyCloud — and keep your data when you rebuild a VM."
 publishedDate: 2026-08-07
 author: "Odukoya Abdullahi"
+authorType: "Person"
 cover: "/journal/img/volumes-social.jpg"
 coverWidth: 1200
 coverHeight: 630

@@ -48,8 +48,10 @@ Common prompt, followed by the topic-specific subject below:
 - PR 13: `74c1e75` — pushed to `ADEMOLA200/blog:post/how-to-use-buckets`.
 - PR 14: `d6783ae` — pushed to `ADEMOLA200/blog:post/how-to-create-firewall-policy`.
 
-All artwork paths and dimensions were checked. Existing article bodies and screenshots
-were preserved. PR 11 remains a draft article. PRs 11, 13, and 14 passed `npm run build`.
-PR 12 passed `astro build`; its full `npm run build` is blocked by three existing
-TypeScript errors in the unchanged `src/components/CodeTabs.astro` (untyped `tab`,
-untyped `i`, and `dataset` on `Element`). No PR was merged.
+All artwork paths and dimensions were checked. PRs 11, 13, and 14 were merged.
+PR 11 remains a draft article. The Resend guide now passes the full build after
+fixing CodeTabs types, keyboard navigation, and progressive enhancement, updating
+the MDX dependency lockfile, and correcting its package-install example.
+
+The combined release passes social image, canonical URL, sitemap, and structured
+data checks across all seven published articles. Named authors use Person schema.

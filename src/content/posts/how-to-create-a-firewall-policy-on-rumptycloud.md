@@ -3,6 +3,7 @@ title: "How to Create a Firewall Policy on RumptyCloud"
 description: "Create a workspace firewall policy, add allow rules, and attach it to a VM or managed database so only the traffic you intend can get through."
 publishedDate: 2026-09-06
 author: "Odukoya Abdullahi Ademola"
+authorType: "Person"
 cover: "/journal/img/firewall-social.jpg"
 coverWidth: 1200
 coverHeight: 630
