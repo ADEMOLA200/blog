@@ -76,7 +76,7 @@
 
   if ($('#article')) {
   /* share */
-  const pageUrl = location.href.split('#')[0];
+  const pageUrl = $('link[rel="canonical"]')?.href || location.href.split('#')[0];
   const title = $('.note-head__title').textContent.trim();
   const x = $('#share-x'), li = $('#share-li');
   if (/^https?:/.test(pageUrl)) {

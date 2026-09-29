@@ -33,30 +33,37 @@ const words = post.body?.trim().split(/\s+/).length ?? 0;
 const readingTime = Math.max(1, Math.ceil(words / 220));
 const site = Astro.site ?? Astro.url;
 const articleURL = new URL(`/blog/${post.id}/`, site);
-const imageURL = new URL(post.data.cover, site);
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: post.data.title,
-  description: post.data.description,
-  image: imageURL.href,
-  datePublished: post.data.publishedDate.toISOString(),
-  dateModified: (post.data.updatedDate ?? post.data.publishedDate).toISOString(),
-  mainEntityOfPage: articleURL.href,
-  author: {
-    "@type": "Organization",
-    name: post.data.author,
+const structuredData = [
+  {
+    "@type": "BlogPosting",
+    "@id": `${articleURL.href}#article`,
+    url: articleURL.href,
+    headline: post.data.title,
+    description: post.data.description,
+    image: { "@id": `${articleURL.href}#primaryimage` },
+    datePublished: post.data.publishedDate.toISOString(),
+    dateModified: (post.data.updatedDate ?? post.data.publishedDate).toISOString(),
+    mainEntityOfPage: { "@id": `${articleURL.href}#webpage` },
+    author: { "@type": post.data.authorType, name: post.data.author },
+    publisher: { "@id": new URL("/#organization", site).href },
+    isPartOf: { "@id": new URL("/#website", site).href },
+    inLanguage: "en",
+    articleSection: note.topic,
+    keywords: post.data.tags.join(", "),
+    wordCount: words,
+    timeRequired: `PT${readingTime}M`,
+    isAccessibleForFree: true,
   },
-  publisher: {
-    "@type": "Organization",
-    name: "RumptyCloud",
-    logo: {
-      "@type": "ImageObject",
-      url: new URL("/favicon.png", site).href,
-    },
+  {
+    "@type": "BreadcrumbList",
+    "@id": `${articleURL.href}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "All notes", item: new URL("/", site).href },
+      { "@type": "ListItem", position: 2, name: note.topic, item: new URL(`/?topic=${note.cat}`, site).href },
+      { "@type": "ListItem", position: 3, name: post.data.title, item: articleURL.href },
+    ],
   },
-  keywords: post.data.tags.join(", "),
-};
+];
 ---
 
 <BaseLayout
@@ -64,15 +71,18 @@ const structuredData = {
   description={post.data.description}
   image={post.data.cover}
   imageAlt={post.data.coverAlt}
+  imageWidth={post.data.coverWidth}
+  imageHeight={post.data.coverHeight}
+  author={post.data.author}
   type="article"
   publishedDate={post.data.publishedDate}
-  updatedDate={post.data.updatedDate}
+  updatedDate={post.data.updatedDate ?? post.data.publishedDate}
   structuredData={structuredData}
 >
   <header class="wrap note-head">
     <nav class="crumbs" aria-label="Breadcrumb">
       <a href="/">← All notes</a><span aria-hidden="true">/</span>
-      <a class="crumbs__topic" href={`/?topic=${note.cat}`}>{note.topic}</a><span aria-hidden="true">/</span><span>No.{number}</span>
+      <a class="crumbs__topic" href={`/?topic=${note.cat}`}>{note.topic}</a><span aria-hidden="true">/</span><span aria-current="page">No.{number}</span>
     </nav>
     <h1 class="note-head__title">{post.data.title}</h1>
     <p class="note-head__lede">{post.data.description}</p>

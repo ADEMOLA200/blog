@@ -1,11 +1,14 @@
 ---
 title: "How to Deploy Django and Setup Postgres Gunicorn and Nginx on RumptyCloud"
-description: "Deploy a Django app from GitHub with RumptyCloud's Auto build option, environment variables, health checks, logs, and automatic deployments."
+description: "Deploy Django on a RumptyCloud virtual machine with PostgreSQL, Gunicorn, and Nginx, from server setup to a running application."
 publishedDate: 2026-08-13
 updatedDate: 2026-08-13
 author: "Adedapo Adelola"
-cover: "/images/how-to-deploy-django-app-rumptycloud-banner.png"
-coverAlt: "How to Deploy a Node.js App on RumptyCloud, with the RumptyCloud and Node.js logos"
+authorType: "Person"
+cover: "/journal/img/note-04-1260.webp"
+coverWidth: 1260
+coverHeight: 760
+coverAlt: "Journal illustration for How to Deploy Django and Setup Postgres Gunicorn and Nginx on RumptyCloud"
 card: "/journal/img/note-04-1260.webp"
 hero: "/journal/img/django-hero-2560.webp"
 tags:

@@ -4,8 +4,11 @@ description: "Deploy a Node.js app from GitHub with RumptyCloud's Auto build opt
 publishedDate: 2026-08-04
 updatedDate: 2026-08-04
 author: "Olalekan Odukoya"
-cover: "/images/how-to-deploy-nodejs-app-rumptycloud-banner.png"
-coverAlt: "How to Deploy a Node.js App on RumptyCloud, with the RumptyCloud and Node.js logos"
+authorType: "Person"
+cover: "/journal/img/note-01-1260.webp"
+coverWidth: 1260
+coverHeight: 760
+coverAlt: "Journal illustration for How to Deploy a Node.js App on RumptyCloud"
 card: "/journal/img/note-01-1260.webp"
 hero: "/journal/img/node-hero-2560.webp"
 tags:

@@ -57,6 +57,7 @@ html[data-theme="light"] .theme-toggle .theme-moon { display: block; }
   letter-spacing: -.02em;
   color: var(--ink);
 }
+#article > h4 { padding-top: 8px; font: 600 18px/1.4 var(--f-display); }
 #article > h3 { padding-top: 8px; font: 700 22px/1.2 var(--f-display); }
 #article :is(h2, h3, h4) { scroll-margin-top: 88px; }
 #article pre { max-width: 100%; overflow-x: auto; padding: 20px; border-radius: 10px; font: 400 14px/1.7 var(--f-mono); }

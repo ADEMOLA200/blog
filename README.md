@@ -33,7 +33,10 @@ title: "Post title"
 description: "A concise search and social description."
 publishedDate: 2026-08-04
 author: "RumptyCloud Team"
+authorType: "Organization"
 cover: "/images/example-banner.png"
+coverWidth: 1200
+coverHeight: 630
 coverAlt: "Accessible description of the banner"
 tags:
   - "Deployment"
@@ -67,3 +70,17 @@ The existing `/blog/<slug>/` routes, RSS feed, sitemap, and SEO metadata are ret
 The archive paginates four notes at a time with shareable `?page=2` URLs.
 Topic filters reset to page one; search covers every published note. With
 JavaScript disabled, all notes remain visible and pagination is hidden.
+
+## Search and social previews
+
+`cover` is the social preview image for Open Graph, Twitter, and article structured
+data; `coverAlt` describes it. Set `coverWidth` and `coverHeight` to the actual
+pixel dimensions. Current posts use the new Journal artwork. Set `authorType` to
+`Person` for named authors or `Organization` for the team. Keep descriptions and
+publication/update dates accurate; do not change dates just to imply freshness.
+
+The built HTML contains article, breadcrumb, website, publisher, and image
+structured data. Full post text, headings, and archive links are available without
+JavaScript. The 404 page is marked `noindex`. Check deployed URLs in Search Console
+and the Rich Results Test after release; social services may retain cached previews
+until their next fetch.

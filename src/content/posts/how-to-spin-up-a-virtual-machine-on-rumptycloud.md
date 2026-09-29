@@ -3,8 +3,11 @@ title: "How to Spin Up a Virtual Machine on RumptyCloud"
 description: "Create, connect to, and manage a Linux virtual machine on RumptyCloud — from account setup and SSH keys to your first SSH session."
 publishedDate: 2026-08-05
 author: "Odukoya Abdullahi"
-cover: "/images/how-to-spin-up-vm-rumptycloud-banner.png"
-coverAlt: "How to Spin Up a Virtual Machine on RumptyCloud, with the RumptyCloud logo and a hexagon icon"
+authorType: "Person"
+cover: "/journal/img/note-02-1260.webp"
+coverWidth: 1260
+coverHeight: 760
+coverAlt: "Journal illustration for How to Spin Up a Virtual Machine on RumptyCloud"
 card: "/journal/img/note-02-1260.webp"
 hero: "/journal/img/vm-hero-2560.webp"
 tags:
