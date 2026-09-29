@@ -1,25 +1,27 @@
----
-const discordUrl = "https://discord.gg/Rukmqzg3uX";
-const youtubeUrl = "https://www.youtube.com/@rumptycloud";
----
-
-<footer class="site-footer">
-  <div class="shell footer-inner">
-    <div>
-      <a class="footer-brand" href="/">Rumpty<span>Cloud</span> Blog</a>
-      <p>Practical notes for people who build and ship.</p>
+<footer class="wrap footer" id="community">
+    <div class="site-foot">
+      <div class="site-foot__brand">
+        <a class="logo" href="https://rumptycloud.com">
+          <img class="logo__mark" src="/journal/icons/logo-mark.svg" width="20" height="20" alt="">
+          <span class="logo__name">RumptyCloud</span>
+        </a>
+        <p>Practical notes for people who build and ship.</p>
+      </div>
+      <nav class="site-foot__col" aria-labelledby="f-read">
+        <h3 id="f-read">Read</h3>
+        <a href="/">All notes</a>
+        <a href="/rss.xml">RSS</a>
+      </nav>
+      <nav class="site-foot__col" aria-labelledby="f-build">
+        <h3 id="f-build">Build</h3>
+        <a href="https://docs.rumptycloud.com">Documentation</a>
+        <a href="https://console.rumptycloud.com">Open console</a>
+        <a href="https://rumptycloud.com">RumptyCloud</a>
+      </nav>
+      <nav class="site-foot__col" aria-labelledby="f-community">
+        <h3 id="f-community">Community</h3>
+        <a href="https://discord.gg/Rukmqzg3uX">Discord</a>
+        <a href="https://www.youtube.com/channel/UCp7tjsn-Fb7oAUngUIdGq5Q">YouTube</a>
+      </nav>
     </div>
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <a href="/">Articles</a>
-      <a href="https://docs.rumptycloud.com">Documentation</a>
-      <a href={discordUrl}>Discord</a>
-      <a href={youtubeUrl}>YouTube</a>
-      <a href="https://rumptycloud.com">RumptyCloud</a>
-      <a href="/rss.xml">RSS</a>
-    </nav>
-  </div>
-  <div class="shell footer-base">
-    <p>&copy; {new Date().getFullYear()} RumptyCloud</p>
-    <p>Built for builders.</p>
-  </div>
-</footer>
+  </footer>

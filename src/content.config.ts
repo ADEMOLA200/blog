@@ -12,6 +12,8 @@ const posts = defineCollection({
     author: z.string().default("RumptyCloud Team"),
     cover: z.string(),
     coverAlt: z.string(),
+    card: z.string().optional(),
+    hero: z.string().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),

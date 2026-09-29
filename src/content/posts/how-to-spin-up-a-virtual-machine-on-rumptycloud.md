@@ -5,6 +5,8 @@ publishedDate: 2026-08-05
 author: "Odukoya Abdullahi"
 cover: "/images/how-to-spin-up-vm-rumptycloud-banner.png"
 coverAlt: "How to Spin Up a Virtual Machine on RumptyCloud, with the RumptyCloud logo and a hexagon icon"
+card: "/journal/img/note-02-1260.webp"
+hero: "/journal/img/vm-hero-2560.webp"
 tags:
   - "Virtual Machines"
   - "Linux"

@@ -1,5 +1,6 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
+import { noteInfo } from "../../lib/notes";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
@@ -16,7 +17,13 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const note = noteInfo(post);
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf());
+const number = String(posts.length - posts.findIndex(item => item.id === post.id)).padStart(2, "0");
+const related = posts.filter(item => item.id !== post.id).slice(0, 3);
+const sections = headings.filter(heading => heading.depth === 2);
+const initials = post.data.author.split(/\s+/).slice(0, 2).map(name => name[0]).join("");
 const published = post.data.publishedDate.toLocaleDateString("en-NG", {
   day: "numeric",
   month: "long",
@@ -62,26 +69,45 @@ const structuredData = {
   updatedDate={post.data.updatedDate}
   structuredData={structuredData}
 >
-  <header class="article-header">
-    <p class="eyebrow">{post.data.tags[0]}</p>
-    <h1>{post.data.title}</h1>
-    <p class="article-deck">{post.data.description}</p>
-    <div class="post-meta">
-      <span>{post.data.author}</span>
-      <time datetime={post.data.publishedDate.toISOString()}>{published}</time>
-      <span>{readingTime} min read</span>
+  <header class="wrap note-head">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">← All notes</a><span aria-hidden="true">/</span>
+      <a class="crumbs__topic" href={`/?topic=${note.cat}`}>{note.topic}</a><span aria-hidden="true">/</span><span>No.{number}</span>
+    </nav>
+    <h1 class="note-head__title">{post.data.title}</h1>
+    <p class="note-head__lede">{post.data.description}</p>
+    <div class="byline">
+      <div class="byline__who"><span class="avatar" aria-hidden="true">{initials}</span><div>
+        <p class="byline__name">{post.data.author}</p>
+        <p class="byline__meta"><time datetime={post.data.publishedDate.toISOString()}>{published}</time> · {readingTime} min read</p>
+      </div></div>
+      <span class="byline__rule" aria-hidden="true"></span>
+      <ul class="tags" aria-label="Topics">{post.data.tags.slice(1).map(tag => <li>{tag}</li>)}</ul>
     </div>
   </header>
-
-  <img
-    class="article-cover"
-    src={post.data.cover}
-    width="1200"
-    height="630"
-    alt={post.data.coverAlt}
-  />
-
-  <article class="prose">
-    <Content />
-  </article>
+  <figure class="wrap note-hero"><img src={note.hero} width="1280" height="520" alt="" fetchpriority="high" /></figure>
+  <div class="wrap note-layout">
+    <aside class="share" aria-labelledby="share-label">
+      <p class="rail-label" id="share-label">Share</p>
+      <button class="share__btn" type="button" id="copy-link">Copy link <span class="share__icon" aria-hidden="true">↗</span></button>
+      <a class="share__btn" id="share-x" href={`https://x.com/intent/post?url=${encodeURIComponent(articleURL.href)}`} target="_blank" rel="noopener noreferrer">Post on X ↗</a>
+      <a class="share__btn" id="share-li" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleURL.href)}`} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+    </aside>
+    <article class="prose" id="article" tabindex="-1"><Content /></article>
+    <aside class="rail">
+      <nav class="toc" aria-label="On this page">
+        <button class="toc__head" type="button" aria-expanded="true" aria-controls="toc-list"><span class="rail-label">On this page</span><span class="toc__count">{sections.length} sections</span></button>
+        <ol class="toc__list" id="toc-list">{sections.map(heading => <li><a href={`#${heading.slug}`}><i></i><span class="toc__n">{heading.text.match(/^\d+/)?.[0]?.padStart(2, "0") ?? "--"}</span><span>{heading.text.replace(/^\d+\.\s*/, "")}</span></a></li>)}</ol>
+        <div class="progress"><div class="progress__row"><span>Read</span><span id="progress-pct">0%</span></div><div class="progress__track" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-bar"></span></div></div>
+      </nav>
+      <section class="follow" aria-labelledby="follow-title"><p class="follow__label">Follow along</p><h2 class="follow__title" id="follow-title">Build on RumptyCloud as you read.</h2><a class="follow__btn" href="https://console.rumptycloud.com">Open console ↗</a></section>
+    </aside>
+  </div>
+  {related.length > 0 && <section class="wrap related" aria-labelledby="related-title">
+    <h2 class="related__title" id="related-title">Related builds</h2>
+    {related.map(item => { const other = noteInfo(item); return <a class="related__row" href={other.href}>
+      <img src={other.card} width="140" height="84" alt="" loading="lazy" decoding="async" />
+      <span class="related__name">{other.title}</span><span class="related__meta">{other.topic} · {other.minutes} min</span><span class="related__arr arr" aria-hidden="true">→</span>
+    </a>; })}
+  </section>}
 </BaseLayout>

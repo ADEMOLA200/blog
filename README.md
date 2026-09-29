@@ -50,3 +50,20 @@ The default canonical origin is `https://blog.rumptycloud.com`. Override it at b
 ```bash
 SITE_URL=https://example.com npm run build
 ```
+
+## Journal design
+
+The Journal uses the supplied RumptyCloud reference design. Illustrations, licensed
+self-hosted fonts, styles, and browser scripts live in `public/journal/`. Shared
+Astro components render navigation, search, cards, and the footer. Edit source
+files rather than generated files in `dist/`.
+
+Posts can optionally set `card` and `hero` image paths; both fall back to `cover`.
+The first tag supplies the topic filter. Counts, reading times, search results,
+article contents, and related builds are generated from published posts. Search
+opens with the search button or `/`; article code blocks have copy buttons.
+The existing `/blog/<slug>/` routes, RSS feed, sitemap, and SEO metadata are retained.
+
+The archive paginates four notes at a time with shareable `?page=2` URLs.
+Topic filters reset to page one; search covers every published note. With
+JavaScript disabled, all notes remain visible and pagination is hidden.

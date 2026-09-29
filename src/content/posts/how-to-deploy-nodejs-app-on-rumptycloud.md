@@ -6,6 +6,8 @@ updatedDate: 2026-08-04
 author: "Olalekan Odukoya"
 cover: "/images/how-to-deploy-nodejs-app-rumptycloud-banner.png"
 coverAlt: "How to Deploy a Node.js App on RumptyCloud, with the RumptyCloud and Node.js logos"
+card: "/journal/img/note-01-1260.webp"
+hero: "/journal/img/node-hero-2560.webp"
 tags:
   - "Deployment"
   - "Node.js"

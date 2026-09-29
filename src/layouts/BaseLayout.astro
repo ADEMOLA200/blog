@@ -2,6 +2,9 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import Search from "../components/Search.astro";
+import { getCollection } from "astro:content";
+import { noteInfo } from "../lib/notes";
 
 interface Props {
   title: string;
@@ -25,6 +28,7 @@ const {
   structuredData,
 } = Astro.props;
 
+const notes = (await getCollection("posts", ({ data }) => !data.draft)).map(noteInfo);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImageURL = new URL(image, Astro.site);
 const fullTitle = title === "RumptyCloud Blog" ? title : `${title} | RumptyCloud Blog`;
@@ -36,18 +40,49 @@ const fullTitle = title === "RumptyCloud Blog" ? title : `${title} | RumptyCloud
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#0B1117" />
+    <meta name="theme-color" content="#0c0f14" />
+    <script is:inline>
+      (() => {
+        const key = 'rumpty-theme';
+        const system = matchMedia('(prefers-color-scheme: light)');
+        let choice;
+        try { choice = localStorage.getItem(key); } catch { /* Storage may be unavailable. */ }
+        const valid = value => value === 'light' || value === 'dark';
+        const apply = () => {
+          const theme = valid(choice) ? choice : system.matches ? 'light' : 'dark';
+          document.documentElement.dataset.theme = theme;
+          document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#f8f5ed' : '#0c0f14';
+          const button = document.querySelector('.theme-toggle');
+          if (button) {
+            button.hidden = false;
+            button.setAttribute('aria-pressed', String(theme === 'light'));
+            button.title = `Switch to ${theme === 'light' ? 'dark' : 'light'} mode`;
+          }
+        };
+        apply();
+        document.addEventListener('DOMContentLoaded', apply, { once: true });
+        document.addEventListener('click', event => {
+          if (!event.target.closest('.theme-toggle')) return;
+          choice = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+          try { localStorage.setItem(key, choice); } catch { /* Still switch for this page. */ }
+          apply();
+        });
+        system.addEventListener('change', () => { if (!valid(choice)) apply(); });
+        window.addEventListener('storage', event => {
+          if (event.key === key || event.key === null) { choice = event.newValue; apply(); }
+        });
+      })();
+    </script>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/png" href="/favicon.png?v=5" />
     <link rel="apple-touch-icon" href="/favicon.png?v=5" />
     <link rel="alternate" type="application/rss+xml" title="RumptyCloud Blog" href="/rss.xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700..800&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="/journal/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/journal/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/journal/css/base.css" />
+    <link rel="stylesheet" href="/journal/css/journal.css" />
+    {type === "article" && <link rel="stylesheet" href="/journal/css/note.css" />}
 
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content="RumptyCloud Blog" />
@@ -75,10 +110,17 @@ const fullTitle = title === "RumptyCloud Blog" ? title : `${title} | RumptyCloud
     }
   </head>
   <body>
+    <a class="skip" href="#main">Skip to content</a>
     <Header />
-    <main>
+    <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer />
+    <Search />
+    <span class="sr-only" role="status" id="status"></span>
+    <script is:inline type="application/json" id="notes-index" set:html={JSON.stringify(notes).replace(/</g, "\\u003c")} />
+    <script is:inline src="/journal/js/site.js" defer></script>
+    <script is:inline src="/journal/js/motion.js" defer></script>
+    {type !== "article" && <script is:inline src="/journal/js/filters.js" defer></script>}
   </body>
 </html>

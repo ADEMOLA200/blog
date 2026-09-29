@@ -5,6 +5,8 @@ publishedDate: 2026-08-10
 author: "Richard Coker"
 cover: "/images/how-to-deploy-postgresql-database-rumptycloud-banner.png"
 coverAlt: "How to Create and Connect to a Postgres Database on RumptyCloud, with the RumptyCloud and Postgres logos"
+card: "/journal/img/note-03-1260.webp"
+hero: "/journal/img/pg-hero-2560.webp"
 tags:
   - "Database"
   - "Postgres"

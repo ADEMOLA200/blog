@@ -1,0 +1,11 @@
+<dialog class="search" id="search" aria-label="Search notes">
+    <div class="search__panel">
+      <form class="search__bar" role="search" id="search-form">
+        <img src="/journal/icons/search.svg" width="15" height="15" alt="">
+        <input id="q" type="search" placeholder="Search notes" autocomplete="off" spellcheck="false" aria-label="Search notes" aria-controls="results">
+        <button type="button" data-close-search aria-label="Close search"><span aria-hidden="true">×</span></button>
+      </form>
+      <ul class="search__results" id="results"></ul>
+      <p class="search__empty" id="search-empty" hidden>No notes match that yet.</p>
+    </div>
+  </dialog>

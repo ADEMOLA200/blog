@@ -6,6 +6,8 @@ updatedDate: 2026-08-13
 author: "Adedapo Adelola"
 cover: "/images/how-to-deploy-django-app-rumptycloud-banner.png"
 coverAlt: "How to Deploy a Node.js App on RumptyCloud, with the RumptyCloud and Node.js logos"
+card: "/journal/img/note-04-1260.webp"
+hero: "/journal/img/django-hero-2560.webp"
 tags:
   - "Deployment"
   - "Django"
@@ -39,7 +41,7 @@ Follow instuction on https://github.com/Sanmo-Labs/rumpty-cli about how to insta
 
 ## 2. Spin up your Vm
 
-Log on to your Rumpty Cloud platform and click Virtual Machines, followed by Create VM. Select the appropriate options for your instance — operating system, region, and so on. Under Compute, choose the specs that best match your workload (a small/medium instance is usually enough for a basic Django app; scale up if you're expecting heavier traffic). You can follow the tutorial here [How to spin up a VM](./how-to-spin-up-a-virtual-machine-on-rumptycloud.md).
+Log on to your Rumpty Cloud platform and click Virtual Machines, followed by Create VM. Select the appropriate options for your instance — operating system, region, and so on. Under Compute, choose the specs that best match your workload (a small/medium instance is usually enough for a basic Django app; scale up if you're expecting heavier traffic). You can follow the tutorial here [How to spin up a VM](/blog/how-to-spin-up-a-virtual-machine-on-rumptycloud/).
 
 Once the VM has spun up and is ready, go to the Connect tab. Under Open an SSH session, copy the provided command and run it in your terminal (or Command Prompt on Windows). This will log you into your server.
 

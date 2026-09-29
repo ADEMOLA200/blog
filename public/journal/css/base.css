@@ -1,0 +1,160 @@
+/* RumptyCloud: shared tokens, fonts and base styles for the blog note and docs home. */
+
+/* fonts (self-hosted, OFL). Bricolage keeps its opsz axis so the browser
+   sets optical size from font-size, the same way Figma renders it. */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("../fonts/bricolage-grotesque-latin.woff2") format("woff2");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../fonts/space-grotesk-latin.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* arrows (← → ↗) aren't in Space Grotesk's web subset; borrow JetBrains Mono's so they match on every OS */
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../fonts/arrows.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+2190-21FF;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/jetbrains-mono-latin-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/jetbrains-mono-latin-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* tokens (match the Figma variables) */
+:root {
+  color-scheme: dark;
+
+  --bg: #0c0f14;
+  --bg-2: #11151c;
+  --bg-3: #161b24;
+  --ink: #f5efe4;
+  --ink-2: #c9c1b3;
+  --ink-3: #7d7568;
+  --line: rgba(245, 239, 228, 0.08);
+  --line-2: rgba(245, 239, 228, 0.14);
+  --line-3: rgba(245, 239, 228, 0.24);
+
+  --accent: #59c2ff;   /* sky */
+  --accent-2: #c8f542; /* lime */
+  --accent-3: #ff6b2c; /* orange */
+  --accent-tint: rgba(89, 194, 255, 0.08);
+  --accent-2-tint: rgba(200, 245, 66, 0.08);
+  --accent-3-tint: rgba(255, 107, 44, 0.08);
+  --accent-2-edge: rgba(200, 245, 66, 0.3);
+  --accent-3-edge: rgba(255, 107, 44, 0.3);
+
+  --cream: #f1ead9;
+  --cream-ink: #1a1812;
+  --cream-ink-2: #5a5345;
+
+  --r-sm: 8px;
+  --r-btn: 10px;
+  --r-md: 12px;
+  --r-lg: 14px;
+  --r-xl: 22px;
+  --r-pill: 999px;
+
+  --f-display: "Bricolage Grotesque", "Space Grotesk", system-ui, sans-serif;
+  --f-body: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --ease-spring: cubic-bezier(.3, 1.1, .35, 1);
+  --ease-pop: cubic-bezier(.2, .9, .3, 1.25);
+  --ease-snap: cubic-bezier(.2, .9, .3, 1.4);
+  --ease-out-soft: cubic-bezier(.25, .8, .3, 1);
+}
+
+/* base */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+kbd, code, pre { font-family: var(--f-mono); }
+::selection { background: rgba(89, 194, 255, 0.32); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+[hidden] { display: none !important; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip {
+  position: absolute; left: 16px; top: -48px; z-index: 100;
+  padding: 10px 14px; border-radius: var(--r-btn);
+  background: var(--accent); color: var(--bg); font-weight: 700; font-size: 14px;
+}
+.skip:focus { top: 12px; }
+
+/* shared pieces */
+.logo { display: inline-flex; align-items: center; gap: 12px; flex: none; }
+.logo__mark { width: 20px; height: 20px; }
+.logo__name { font: 700 17px/normal var(--f-display); color: var(--ink); white-space: nowrap; }
+.logo__rule { width: 1px; height: 16px; background: var(--line-2); flex: none; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 18px;
+  border-radius: var(--r-btn);
+  font: 700 14px/normal var(--f-body);
+  white-space: nowrap;
+  user-select: none;
+  transition: transform .16s ease-out, background-color .16s ease-out;
+}
+.btn--primary { background: var(--accent); color: var(--bg); }
+.btn:active { transform: scale(.97); }
+.btn--block { width: 100%; }
+
+.menu-btn {
+  display: none;
+  width: 40px; height: 40px; flex: none;
+  border: 1px solid var(--line-2); border-radius: var(--r-btn);
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.menu-btn span { width: 16px; height: 1.5px; border-radius: 2px; background: var(--ink-2); transition: transform .2s var(--ease-out-soft); }
+.menu-btn[aria-expanded="true"] span:first-child { transform: translateY(3.25px) rotate(45deg); }
+.menu-btn[aria-expanded="true"] span:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+
+.arr { display: inline-block; transition: transform .16s var(--ease-snap); }
+
+@media (hover: hover) {
+  .btn--primary:hover { background: #7bcfff; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
+  .btn:active { transform: none; }
+}
