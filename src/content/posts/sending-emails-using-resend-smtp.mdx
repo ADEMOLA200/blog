@@ -4,6 +4,7 @@ description: "A guide to setting up Resend for transactional emails, tested on a
 publishedDate: 2026-08-20
 updatedDate: 2026-08-20
 author: "Adedapo Adelola"
+authorType: "Person"
 cover: "/journal/img/resend-social.jpg"
 coverWidth: 1200
 coverHeight: 630
@@ -57,7 +58,7 @@ Next, check what you've got on your VM:
 <CodeTabs tabs={[{ label: "Python" }, { label: "Node.js" }]}>
 ```bash
 python3 --version
-````
+```
 
 ```bash
 node --version
@@ -68,7 +69,7 @@ If Node.js isn't installed yet, grab it via your distro's package manager or [nv
 
 <CodeTabs tabs={[{ label: "Node.js" }]}>
 ```bash
-node --version
+npm install nodemailer
 ```
 </CodeTabs>
 
@@ -124,7 +125,7 @@ finally:
         server.quit()
     except:
         pass
-````
+```
 
 ```javascript
 import nodemailer from "nodemailer";

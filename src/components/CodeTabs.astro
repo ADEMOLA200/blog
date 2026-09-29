@@ -1,68 +1,94 @@
 ---
-const { tabs } = Astro.props; // e.g. [{ label: "Python", lang: "python" }, { label: "Node.js", lang: "javascript" }]
+interface Props {
+  tabs: { label: string; lang?: string }[];
+}
+const { tabs } = Astro.props;
+const tabGroup = `code-tabs-${crypto.randomUUID()}`;
 ---
 
-<div class="code-tabs">
-  <div class="code-tabs__buttons" role="tablist">
-    {tabs.map((tab, i) => (
+<div class="code-tabs" data-tab-group={tabGroup}>
+  <div class="code-tabs__buttons" role="tablist" aria-label="Code language" hidden>
+    {tabs.map((tab, index) => (
       <button
+        type="button"
         class="code-tabs__btn"
-        data-index={i}
-        aria-selected={i === 0 ? "true" : "false"}
+        id={`${tabGroup}-tab-${index}`}
+        aria-controls={`${tabGroup}-panel-${index}`}
+        aria-selected={index === 0 ? "true" : "false"}
+        tabindex={index === 0 ? 0 : -1}
         role="tab"
       >
         {tab.label}
       </button>
     ))}
   </div>
-  <div class="code-tabs__panels">
-    <slot />
-  </div>
+  <div class="code-tabs__panels"><slot /></div>
 </div>
 
 <style>
+  .code-tabs { min-width: 0; }
   .code-tabs__buttons {
     display: flex;
-    gap: 0.25rem;
-    border-bottom: 1px solid #2a2f3a;
-    margin-bottom: -1px;
+    gap: .25rem;
+    border-bottom: 1px solid var(--line-2, #2a2f3a);
   }
+  .code-tabs__buttons[hidden] { display: none; }
   .code-tabs__btn {
     background: transparent;
     border: none;
-    color: #9aa4b2;
+    color: var(--ink-2, #9aa4b2);
     font-family: "JetBrains Mono", monospace;
-    font-size: 0.85rem;
-    padding: 0.5rem 1rem;
+    font-size: .85rem;
+    padding: .5rem 1rem;
     cursor: pointer;
     border-bottom: 2px solid transparent;
   }
   .code-tabs__btn[aria-selected="true"] {
-    color: #f5efe4;
-    border-bottom-color: #59c2ff;
+    color: var(--ink, #f5efe4);
+    border-bottom-color: var(--accent, #59c2ff);
   }
-  .code-tabs__panels > :global(*) {
-    display: none;
-  }
-  .code-tabs__panels > :global(.code-tabs__panel-active) {
-    display: block;
-  }
+  .code-tabs__panels > :global([hidden]) { display: none !important; }
 </style>
 
 <script>
-  document.querySelectorAll(".code-tabs").forEach((wrapper) => {
-    const buttons = wrapper.querySelectorAll(".code-tabs__btn");
-    const panels = wrapper.querySelectorAll(".code-tabs__panels > *");
-
-    panels.forEach((p, i) => p.classList.toggle("code-tabs__panel-active", i === 0));
-
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const index = Number(btn.dataset.index);
-        buttons.forEach((b) => b.setAttribute("aria-selected", "false"));
-        btn.setAttribute("aria-selected", "true");
-        panels.forEach((p, i) => p.classList.toggle("code-tabs__panel-active", i === index));
+  function initializeCodeTabs() {
+    document.querySelectorAll<HTMLElement>(".code-tabs").forEach(wrapper => {
+      const buttons = [...wrapper.querySelectorAll<HTMLButtonElement>(".code-tabs__btn")];
+      const panels = [...wrapper.querySelectorAll<HTMLElement>(".code-tabs__panels > *")];
+      const tablist = wrapper.querySelector<HTMLElement>('[role="tablist"]');
+      if (!tablist || !buttons.length || buttons.length !== panels.length) return;
+      const select = (index: number, focus = false) => {
+        buttons.forEach((button, position) => {
+          button.setAttribute("aria-selected", String(position === index));
+          button.tabIndex = position === index ? 0 : -1;
+          panels[position].hidden = position !== index;
+        });
+        if (focus) buttons[index].focus();
+      };
+      panels.forEach((panel, index) => {
+        panel.id = `${wrapper.dataset.tabGroup}-panel-${index}`;
+        panel.setAttribute("role", "tabpanel");
+        panel.setAttribute("aria-labelledby", buttons[index].id);
+        panel.tabIndex = 0;
       });
+      buttons.forEach((button, index) => {
+        button.addEventListener("click", () => select(index));
+        button.addEventListener("keydown", event => {
+          let next = index;
+          if (event.key === "ArrowRight") next = (index + 1) % buttons.length;
+          else if (event.key === "ArrowLeft") next = (index + buttons.length - 1) % buttons.length;
+          else if (event.key === "Home") next = 0;
+          else if (event.key === "End") next = buttons.length - 1;
+          else return;
+          event.preventDefault();
+          select(next, true);
+        });
+      });
+      select(0);
+      tablist.hidden = false;
     });
-  });
+  }
+  // Run after the shared script has added copy controls around code blocks.
+  if (document.readyState === "complete") initializeCodeTabs();
+  else document.addEventListener("DOMContentLoaded", initializeCodeTabs, { once: true });
 </script>
