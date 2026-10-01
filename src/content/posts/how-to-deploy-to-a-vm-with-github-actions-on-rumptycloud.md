@@ -19,7 +19,7 @@ tags:
 draft: true
 ---
 
-In our [Django guide](https://blog.rumptycloud.com/blog/how-to-deploy-a-django-app-on-rumptycloud/) we deployed an app the honest way: SSH into the VM, pull the code, restart gunicorn, reload nginx. It works, and it's how a lot of servers are run. But notice what it costs you — every single deploy means logging in and typing commands by hand.
+In our [Django guide](https://blog.rumptycloud.com/blog/how-to-deploy-a-django-app-on-rumptycloud/) we deployed an app the honest way: SSH into the VM, pull the code, restart gunicorn, reload nginx. It works, and it's how a lot of servers are run. But notice what it costs you. Every deploy means logging in and typing commands by hand.
 
 This post removes that step. You'll wire a GitHub Actions workflow to a RumptyCloud virtual machine, so the sequence becomes: **you push, GitHub builds, the artifact lands on your VM, nginx reloads.** No SSH, no manual steps, no forgetting to restart the service.
 
@@ -35,7 +35,7 @@ Worth clearing up first, because the docs use similar words for two different th
 | Servers, ports, TLS | handled for you | yours to run |
 | Rollback | instant, from a stored artifact | redeploy an earlier commit |
 
-If you don't want to run a server at all, the [Deployments route](https://blog.rumptycloud.com/blog/how-to-deploy-nodejs-app-on-rumptycloud/) is less work — no nginx, no firewall rules, no SSH. Choose it when you just want the app online.
+If you don't want to run a server at all, the [Deployments route](https://blog.rumptycloud.com/blog/how-to-deploy-nodejs-app-on-rumptycloud/) is less work: no nginx, no firewall rules, no SSH. Choose it when you just want the app online.
 
 Choose the VM route when you need the machine: custom services, a non-Node stack, your own network layout, or processes you'd rather manage with systemd. That's the route this post covers.
 
@@ -72,9 +72,9 @@ In your repository, go to **Settings → Secrets and variables → Actions** and
 
 ![The GitHub Actions secrets page with the deploy secrets configured](/images/how-to-deploy-to-vm-github-actions-repo-secrets.png)
 
-The second one trips everyone up, so let's be clear about why it's needed. When the workflow runs on GitHub's runner, there is no SSH agent and no key on disk — the runner has no way to prove it's you. Rumpty's SSH is a two-hop connection: the first hop to the platform is authenticated for you, but the second hop into the VM still needs a real key. So we hand the runner one explicitly.
+The second one catches people out. GitHub's runner has no SSH agent and no keys of its own, so it has no way to prove who it is. Rumpty connects in two hops: the first one, to the platform, is handled for you, but the second one, into the VM, needs a real key. That's why we pass one in.
 
-The key has to be one the VM already trusts. The simplest option is the SSH key you already attached to the VM — grab its private half from your machine:
+Use a key the VM already trusts. The easiest one is the SSH key you attached when you created the VM. Grab its private half from your machine:
 
 ```bash
 cat ~/.ssh/id_rsa | pbcopy
@@ -108,7 +108,7 @@ apt update && apt install -y nginx
 mkdir -p /var/www/tutorial-vm
 ```
 
-**Then take port 8080 back from the platform.** Every new VM ships with a small welcome service already listening on 8080. If you configure nginx for 8080 and reload without stopping it, nginx fails to bind, the reload does nothing, and your deploy still reports success — while the welcome page keeps serving. Stop it first:
+**Then take port 8080 back from the platform.** Every new VM ships with a small welcome service already listening on 8080. If you configure nginx for 8080 and reload without stopping it, nginx fails to bind, the reload does nothing, and your deploy still reports success while the welcome page keeps serving. Stop it first:
 
 ```bash
 systemctl disable --now rumpty-welcome.service
@@ -237,7 +237,7 @@ That's the whole loop: a `git push`, a green tick, and your updated site on a pu
 
 ## Updating it later
 
-This is the payoff — shipping an update is now just:
+This is the payoff. Shipping an update is now just:
 
 ```bash
 git push
@@ -274,12 +274,12 @@ rumpty exec tutorial-vm --ws <workspace-slug> -- sudo systemctl reload nginx
 
 ## Conclusion
 
-The VM you started with a plain `git clone` is now a deployment target. GitHub builds it, the artifact ships itself, and nginx picks it up — all triggered by a push you were going to make anyway.
+The VM you started with a plain `git clone` is now a deployment target. GitHub builds it, the artifact ships itself, and nginx picks it up, all triggered by a push you were going to make anyway.
 
 The two things that cost me the most time here are worth repeating: **stop the welcome service before pointing nginx at 8080**, and **give the runner a key**. Both fail quietly — the deploy reports success either way, and you find out from a browser. Check the app URL after your first run rather than trusting the green tick.
 
 ## Which route should you pick?
 
-If you read this and thought "all I want is the app online, I don't want to maintain a server" — use [Deployments](https://blog.rumptycloud.com/blog/how-to-deploy-nodejs-app-on-rumptycloud/). It's fewer moving parts and it manages TLS for you.
+If you read this and thought "all I want is the app online, I don't want to maintain a server," use [Deployments](https://blog.rumptycloud.com/blog/how-to-deploy-nodejs-app-on-rumptycloud/). It's fewer moving parts and it manages TLS for you.
 
 Stay on the VM route when the machine itself is part of the design: you need systemd services, a custom domain with your own certificates, a non-Node runtime, or the app sharing a network with other resources. That's the trade — more responsibility, more control.
